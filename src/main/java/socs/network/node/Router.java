@@ -1,0 +1,249 @@
+package socs.network.node;
+
+import socs.network.message.SOSPFPacket;
+import socs.network.mutlithreadserver.MultiThreadSocketServer;
+import socs.network.util.Configuration;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.util.*;
+
+
+public class Router {
+
+  protected LinkStateDatabase lsd;
+
+  RouterDescription rd = new RouterDescription();
+
+  //assuming that all routers are with 4 ports
+  Link[] ports = new Link[4];
+
+  // Server
+  MultiThreadSocketServer server;
+
+
+  public Router(Configuration config) {
+    rd.simulatedIPAddress = config.getString("socs.network.router.ip");
+    rd.processIPAddress = config.getString("socs.network.router.host");
+    rd.processPortNumber = config.getShort("socs.network.router.port");
+
+    lsd = new LinkStateDatabase(rd);
+
+    // Temporary random port
+    Random r = new Random();
+    // Initialize my server
+    server = new MultiThreadSocketServer(rd.processPortNumber, this);
+    server.start();
+  }
+
+  /**
+   * output the shortest path to the given destination ip
+   * <p/>
+   * format: source ip address  -> ip address -> ... -> destination ip
+   *
+   * @param destinationIP the ip adderss of the destination simulated router
+   */
+  private void processDetect(String destinationIP) {
+
+  }
+
+  /**
+   * disconnect with the router identified by the given destination ip address
+   * Notice: this command should trigger the synchronization of database
+   *
+   * @param portNumber the port number which the link attaches at
+   */
+  private void processDisconnect(short portNumber) {
+
+  }
+
+  /**
+   * attach the link to the remote router, which is identified by the given simulated ip;
+   * to establish the connection via socket, you need to indentify the process IP and process Port;
+   * additionally, weight is the cost to transmitting data through the link
+   * <p/>
+   * NOTE: this command should not trigger link database synchronization
+   */
+   private void processAttach(String processIP, short processPort,
+                             String simulatedIP, short weight) {
+    // Create new socket and attach to the ServerSocket of the desired Router
+    Socket socket;
+    try{
+      socket = new Socket(processIP, (int) processPort);
+      System.err.println("Attached.");
+    }catch(Exception e){
+      System.out.println("Failed to attach");
+      e.printStackTrace();
+      return;
+    }
+
+    // Map this socket to the simulated ip address and create link
+    RouterDescription newNeighbourRd = new RouterDescription(processIP, processPort, simulatedIP, RouterStatus.INIT);
+    try{
+      addLink(new Link(rd, newNeighbourRd, socket));
+    }catch(Exception e){
+      System.out.println("Reached maximum links.");
+      e.printStackTrace();
+      return;
+    }
+
+  }
+
+  /**
+   * broadcast Hello to neighbors
+   */
+  private void processStart() {
+    for(int i = 0; i < ports.length; i++){
+      if(ports[i] != null){
+        SOSPFPacket packet = new SOSPFPacket(ports[i].router1, ports[i].router2, (short)0);
+        try{
+          ports[i].out.writeObject(packet);
+          ports[i].out.flush();
+        }catch(IOException e){
+          System.out.println("Failed to send HELLO to " + packet.dstIP);
+        }
+      }
+    }
+  }
+
+  /**
+   * attach the link to the remote router, which is identified by the given simulated ip;
+   * to establish the connection via socket, you need to indentify the process IP and process Port;
+   * additionally, weight is the cost to transmitting data through the link
+   * <p/>
+   * This command does trigger the link database synchronization
+   */
+  private void processConnect(String processIP, short processPort,
+                              String simulatedIP, short weight) {
+
+  }
+
+  /**
+   * output the neighbors of the routers
+   */
+  private void processNeighbors() {
+    for(int i = 0; i < ports.length; i++){
+      if(ports[i] != null){
+        System.out.println(ports[i].getLinkIP());
+      }
+    }
+  }
+
+  /**
+   * disconnect with all neighbors and quit the program
+   */
+  private void processQuit() {
+
+  }
+
+  //
+  // Helper Methods
+  //
+  public RouterDescription getRouterDescription(){
+    return rd;
+  }
+
+  public void addLink(Link link) throws Exception{
+    for(int i = 0; i < ports.length; i++){
+      if(ports[i] == null){
+        ports[i] = link;
+        return;
+      }
+    }
+    // If no free ports throw Exception
+    throw new Exception("No ports available for new link.");
+  }
+
+  public Link getLink(String simulatedIP){
+    for(int i = 0; i < ports.length; i++){
+      if(ports[i] != null && ports[i].router2.simulatedIPAddress.equals(simulatedIP)){
+        return ports[i];
+      }
+    }
+    return null;
+  }
+
+  // When a client service thread receives a message, this method is called
+  public void processPacket(SOSPFPacket packet, Socket sender){
+    if(packet.sospfType == 0){ // HELLO
+      handleHello(packet, sender);
+    }
+  }
+
+  public void handleHello(SOSPFPacket packet, Socket sender){
+    Link link = getLink(packet.srcIP);
+
+    if(link != null && link.router2.status == RouterStatus.INIT){ // Link is currently at INIT, set status as TWO-WAY
+      System.out.println("received HELLO from " + packet.srcIP);
+      link.setLinkStatus(RouterStatus.TWO_WAY);
+      System.out.println("set " + packet.srcIP + " state to TWO_WAY");
+      sendHello(packet.srcIP);
+    }else if(link == null){ // No link yet, attach to the sender and send hello back
+      // TODO: Do I only attach back when I've received the first hello?
+      System.out.println("received HELLO from " + packet.srcIP);
+      System.out.println(packet.srcProcessIP + " " + packet.srcProcessPort);
+      processAttach(packet.srcProcessIP, packet.srcProcessPort, packet.srcIP, (short) 0);
+      System.out.println("set " + packet.srcIP + " state to INIT");
+      sendHello(packet.srcIP);
+    }
+  }
+
+  // Send hello to a single router
+  public void sendHello(String simulatedIP){
+    Link link = getLink(simulatedIP);
+    SOSPFPacket packet = new SOSPFPacket(link.router1, link.router2, (short)0);
+    try{
+      link.out.writeObject(packet);
+      link.out.flush();
+    }catch(IOException e){
+      System.out.println("Failed to send HELLO to "+ packet.dstIP);
+      e.printStackTrace();
+    }
+  }
+
+
+  public void terminal() {
+    try {
+      InputStreamReader isReader = new InputStreamReader(System.in);
+      BufferedReader br = new BufferedReader(isReader);
+      System.out.print(">> ");
+      String command = br.readLine();
+      while (true) {
+        if (command.startsWith("detect ")) {
+          String[] cmdLine = command.split(" ");
+          processDetect(cmdLine[1]);
+        } else if (command.startsWith("disconnect ")) {
+          String[] cmdLine = command.split(" ");
+          processDisconnect(Short.parseShort(cmdLine[1]));
+        } else if (command.startsWith("quit")) {
+          processQuit();
+        } else if (command.startsWith("attach ")) {
+          String[] cmdLine = command.split(" ");
+          processAttach(cmdLine[1], Short.parseShort(cmdLine[2]),
+                  cmdLine[3], Short.parseShort(cmdLine[4]));
+        } else if (command.equals("start")) {
+          processStart();
+        } else if (command.equals("connect ")) {
+          String[] cmdLine = command.split(" ");
+          processConnect(cmdLine[1], Short.parseShort(cmdLine[2]),
+                  cmdLine[3], Short.parseShort(cmdLine[4]));
+        } else if (command.equals("neighbors")) {
+          //output neighbors
+          processNeighbors();
+        } else {
+          //invalid command
+          break;
+        }
+        System.out.print(">> ");
+        command = br.readLine();
+      }
+      isReader.close();
+      br.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+}
