@@ -43,8 +43,15 @@ public class MultiThreadSocketServer extends Thread{
         while(serverOn){
             // Accept incoming connections
             try{
+
                 Socket clientSocket = server.accept();
 
+                // If there are too many connections close the new connection
+                if(myRouter.getNumLinks() >= myRouter.getMaxLinks()){
+                    System.out.println("Maximum neighbours exceeded, closing connection");
+                    clientSocket.close();
+                    continue;
+                }
                 try{
                     // Spawn new service thread
                     System.err.println("Client attempting to attach");

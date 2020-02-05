@@ -68,26 +68,33 @@ public class Router {
    */
    private void processAttach(String processIP, short processPort,
                              String simulatedIP, short weight) {
-    // Create new socket and attach to the ServerSocket of the desired Router
-    Socket socket;
-    try{
-      socket = new Socket(processIP, (int) processPort);
-      System.err.println("Attached.");
-    }catch(Exception e){
-      System.out.println("Failed to attach");
-      e.printStackTrace();
-      return;
-    }
+     // Check if already previously attached/connected
+     if (hasLink(simulatedIP)) {
+       System.out.println("Already attached to " + simulatedIP);
+       return;
+     }
 
-    // Map this socket to the simulated ip address and create link
-    RouterDescription newNeighbourRd = new RouterDescription(processIP, processPort, simulatedIP, RouterStatus.INIT);
+     // Create new socket and attach to the ServerSocket of the desired Router
+     Socket socket;
+
     try{
-      addLink(new Link(rd, newNeighbourRd, socket));
-    }catch(Exception e){
-      System.out.println("Reached maximum links.");
-      e.printStackTrace();
-      return;
-    }
+       socket = new Socket(processIP, (int) processPort);
+       System.err.println("Attached.");
+     }catch(Exception e){
+       System.out.println("Failed to attach");
+       e.printStackTrace();
+       return;
+     }
+
+     // Map this socket to the simulated ip address and create link
+     RouterDescription newNeighbourRd = new RouterDescription(processIP, processPort, simulatedIP, RouterStatus.INIT);
+     try{
+       addLink(new Link(rd, newNeighbourRd, socket));
+     }catch(Exception e){
+       System.out.println("Reached maximum links.");
+       e.printStackTrace();
+       return;
+     }
 
   }
 
@@ -125,7 +132,7 @@ public class Router {
    */
   private void processNeighbors() {
     for(int i = 0; i < ports.length; i++){
-      if(ports[i] != null){
+      if(ports[i] != null && ports[i].router2.status == RouterStatus.TWO_WAY){
         System.out.println(ports[i].getLinkIP());
       }
     }
@@ -163,6 +170,32 @@ public class Router {
       }
     }
     return null;
+  }
+
+  public int getNumLinks(){
+    int links = 0;
+    for(int i = 0; i < ports.length; i++){
+      if(ports[i] != null){
+        links ++;
+      }
+    }
+    return links;
+  }
+
+
+  // Check if a link already exists with the given simulated ip
+  public boolean hasLink(String simulatedIP){
+    for(int i = 0; i < ports.length; i++){
+      if(ports[i] != null && ports[i].router2.simulatedIPAddress.equals(simulatedIP)){
+        return true;
+      }
+    }
+    return false;
+  }
+
+
+  public int getMaxLinks(){
+    return ports.length;
   }
 
   // When a client service thread receives a message, this method is called
