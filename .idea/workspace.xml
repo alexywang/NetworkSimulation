@@ -2,16 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="87c107ae-5069-4e14-85b5-c3f6023828a3" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/COMP535.iml" beforeDir="false" afterPath="$PROJECT_DIR$/COMP535.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/socs/network/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/socs/network/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/socs/network/mutlithreadserver/MultiThreadSocketServer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/socs/network/mutlithreadserver/MultiThreadSocketServer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/socs/network/node/Router.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/socs/network/node/Router.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/META-INF/COMP535.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/socs/network/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/socs/network/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/socs/network/mutlithreadserver/MultiThreadSocketServer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/socs/network/mutlithreadserver/MultiThreadSocketServer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/socs/network/node/Router.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/socs/network/node/Router.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/router.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/router.jar" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -119,35 +116,35 @@
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1173" y="359" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580782759996" />
-    <state width="1578" height="282" key="GridCell.Tab.0.bottom" timestamp="1580872766386">
+    <state width="1578" height="282" key="GridCell.Tab.0.bottom" timestamp="1581020305239">
       <screen x="0" y="0" width="1620" height="1040" />
     </state>
-    <state width="1578" height="282" key="GridCell.Tab.0.bottom/0.0.1620.1040@0.0.1620.1040" timestamp="1580872766386" />
+    <state width="1578" height="282" key="GridCell.Tab.0.bottom/0.0.1620.1040@0.0.1620.1040" timestamp="1581020305239" />
     <state width="1098" height="400" key="GridCell.Tab.0.bottom/0.0.3440.1400@0.0.3440.1400" timestamp="1580783755788" />
-    <state width="1578" height="282" key="GridCell.Tab.0.center" timestamp="1580872766386">
+    <state width="1578" height="282" key="GridCell.Tab.0.center" timestamp="1581020305239">
       <screen x="0" y="0" width="1620" height="1040" />
     </state>
-    <state width="1578" height="282" key="GridCell.Tab.0.center/0.0.1620.1040@0.0.1620.1040" timestamp="1580872766386" />
+    <state width="1578" height="282" key="GridCell.Tab.0.center/0.0.1620.1040@0.0.1620.1040" timestamp="1581020305239" />
     <state width="1098" height="400" key="GridCell.Tab.0.center/0.0.3440.1400@0.0.3440.1400" timestamp="1580783755787" />
-    <state width="1578" height="282" key="GridCell.Tab.0.left" timestamp="1580872766386">
+    <state width="1578" height="282" key="GridCell.Tab.0.left" timestamp="1581020305238">
       <screen x="0" y="0" width="1620" height="1040" />
     </state>
-    <state width="1578" height="282" key="GridCell.Tab.0.left/0.0.1620.1040@0.0.1620.1040" timestamp="1580872766386" />
+    <state width="1578" height="282" key="GridCell.Tab.0.left/0.0.1620.1040@0.0.1620.1040" timestamp="1581020305238" />
     <state width="1098" height="400" key="GridCell.Tab.0.left/0.0.3440.1400@0.0.3440.1400" timestamp="1580783755787" />
-    <state width="1578" height="282" key="GridCell.Tab.0.right" timestamp="1580872766386">
+    <state width="1578" height="282" key="GridCell.Tab.0.right" timestamp="1581020305239">
       <screen x="0" y="0" width="1620" height="1040" />
     </state>
-    <state width="1578" height="282" key="GridCell.Tab.0.right/0.0.1620.1040@0.0.1620.1040" timestamp="1580872766386" />
+    <state width="1578" height="282" key="GridCell.Tab.0.right/0.0.1620.1040@0.0.1620.1040" timestamp="1581020305239" />
     <state width="1098" height="400" key="GridCell.Tab.0.right/0.0.3440.1400@0.0.3440.1400" timestamp="1580783755788" />
     <state x="1199" y="278" key="SettingsEditor" timestamp="1580782751409">
       <screen x="0" y="0" width="3440" height="1400" />
     </state>
     <state x="1199" y="278" key="SettingsEditor/0.0.3440.1400@0.0.3440.1400" timestamp="1580782751409" />
-    <state x="666" y="392" key="com.intellij.ide.util.TipDialog" timestamp="1580870833638">
-      <screen x="0" y="0" width="1620" height="1040" />
+    <state x="1414" y="528" key="com.intellij.ide.util.TipDialog" timestamp="1581100786278">
+      <screen x="0" y="0" width="3440" height="1400" />
     </state>
-    <state x="666" y="392" key="com.intellij.ide.util.TipDialog/0.0.1620.1040@0.0.1620.1040" timestamp="1580870833638" />
-    <state x="1414" y="528" key="com.intellij.ide.util.TipDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1580856768791" />
+    <state x="666" y="392" key="com.intellij.ide.util.TipDialog/0.0.1620.1040@0.0.1620.1040" timestamp="1581025934391" />
+    <state x="1414" y="528" key="com.intellij.ide.util.TipDialog/0.0.3440.1400@0.0.3440.1400" timestamp="1581100786278" />
     <state x="469" y="242" key="run.anything.popup" timestamp="1580871376856">
       <screen x="0" y="0" width="1620" height="1040" />
     </state>

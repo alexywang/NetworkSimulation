@@ -74,6 +74,12 @@ public class Router {
        return;
      }
 
+     // Prevent attaching to self
+     if(simulatedIP.equals(rd.simulatedIPAddress)){
+       System.out.println("Cannot attach to self.");
+       return;
+     }
+
      // Create new socket and attach to the ServerSocket of the desired Router
      Socket socket;
 
@@ -81,8 +87,7 @@ public class Router {
        socket = new Socket(processIP, (int) processPort);
        System.err.println("Attached.");
      }catch(Exception e){
-       System.out.println("Failed to attach");
-       e.printStackTrace();
+       System.out.println("Failed to attach to " + simulatedIP);
        return;
      }
 
@@ -92,7 +97,6 @@ public class Router {
        addLink(new Link(rd, newNeighbourRd, socket));
      }catch(Exception e){
        System.out.println("Reached maximum links.");
-       e.printStackTrace();
        return;
      }
 
@@ -214,7 +218,6 @@ public class Router {
       System.out.println("set " + packet.srcIP + " state to TWO_WAY");
       sendHello(packet.srcIP);
     }else if(link == null){ // No link yet, attach to the sender and send hello back
-      // TODO: Do I only attach back when I've received the first hello?
       System.out.println("received HELLO from " + packet.srcIP);
       System.out.println(packet.srcProcessIP + " " + packet.srcProcessPort);
       processAttach(packet.srcProcessIP, packet.srcProcessPort, packet.srcIP, (short) 0);
@@ -276,6 +279,8 @@ public class Router {
       br.close();
     } catch (Exception e) {
       e.printStackTrace();
+      // After dealing with exception keep terminal active
+      terminal();
     }
   }
 
