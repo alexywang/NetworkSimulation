@@ -19,7 +19,7 @@ public class Main {
     r.terminal();
 
     // Temporary code for testing in IDE
-//    System.err.println("Starting Router");
+//    //System.err.println("Starting Router");
 //    Random rand = new Random();
 //    Router r = new Router(new Configuration("conf/router"+(1+rand.nextInt(6))+".conf"));
 //    r.terminal();

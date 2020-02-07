@@ -85,7 +85,7 @@ public class Router {
 
     try{
        socket = new Socket(processIP, (int) processPort);
-       System.err.println("Attached.");
+       //System.err.println("Attached.");
      }catch(Exception e){
        System.out.println("Failed to attach to " + simulatedIP);
        return;

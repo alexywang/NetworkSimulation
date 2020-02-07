@@ -36,8 +36,8 @@ public class MultiThreadSocketServer extends Thread{
             System.exit(-1);
         }
 
-        System.err.println("Server Socket listening on port " + server.getLocalPort());
-        System.err.println("My simulated ip: " + myRouter.getRouterDescription().simulatedIPAddress);
+        //System.err.println("Server Socket listening on port " + server.getLocalPort());
+        //System.err.println("My simulated ip: " + myRouter.getRouterDescription().simulatedIPAddress);
 
         // Wait for connections
         while(serverOn){
@@ -54,11 +54,11 @@ public class MultiThreadSocketServer extends Thread{
                 }
                 try{
                     // Spawn new service thread
-                    System.err.println("Client attempting to attach");
+                    //System.err.println("Client attempting to attach");
                     ClientServiceThread clientThread = new ClientServiceThread(clientSocket, myRouter);
                     threads.add(clientThread);
                     clientThread.start();
-                    System.err.println("A client has attached");
+                    //System.err.println("A client has attached");
 
 
                 }catch (Exception e){
