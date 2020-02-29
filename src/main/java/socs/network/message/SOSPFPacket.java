@@ -23,9 +23,24 @@ public class SOSPFPacket implements Serializable {
     //Todo: what do i fill in for routerID and neighborID?
   }
 
+  public SOSPFPacket(RouterDescription source, RouterDescription dest, LSA lsa){
+    srcProcessIP = source.processIPAddress;
+    srcProcessPort = source.processPortNumber;
+    srcIP = source.simulatedIPAddress;
+    dstIP = dest.simulatedIPAddress;
+    sospfType = 1;
+
+    lsaArray = new Vector<LSA>();
+    lsaArray.add(lsa);
+  }
+
+  //For weight synchronization
+  public short weight = -1;
+
   //for inter-process communication
   public String srcProcessIP;
   public short srcProcessPort;
+
 
   //simulated IP address
   public String srcIP;

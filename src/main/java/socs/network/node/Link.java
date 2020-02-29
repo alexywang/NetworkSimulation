@@ -11,15 +11,17 @@ public class Link {
   Socket socket;
   ObjectOutputStream out;
   ObjectInputStream in;
+  short weight;
 
 
-  public Link(RouterDescription r1, RouterDescription r2, Socket r2Socket) throws Exception {
+  public Link(RouterDescription r1, RouterDescription r2, Socket r2Socket, short weight) throws Exception {
     router1 = r1;
     router2 = r2;
 
     socket = r2Socket;
     out = new ObjectOutputStream(socket.getOutputStream());
     in = new ObjectInputStream(socket.getInputStream());
+    this.weight = weight;
 
   }
 

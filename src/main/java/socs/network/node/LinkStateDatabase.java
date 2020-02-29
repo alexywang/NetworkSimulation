@@ -26,6 +26,14 @@ public class LinkStateDatabase {
     return null;
   }
 
+  public void addLSA(LSA lsa){
+    // Only update if lsa is latest from that router
+    if(!_store.containsKey(lsa.linkStateID) || _store.get(lsa.linkStateID).lsaSeqNumber < lsa.lsaSeqNumber){
+      _store.put(lsa.linkStateID, lsa);
+    }
+  }
+
+
   //initialize the linkstate database by adding an entry about the router itself
   private LSA initLinkStateDatabase() {
     LSA lsa = new LSA();
