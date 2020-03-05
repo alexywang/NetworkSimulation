@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class LinkDescription implements Serializable {
   public String linkID;
+  public String neighbourIP;
   public int portNum;
   public int tosMetrics;
 
@@ -11,8 +12,9 @@ public class LinkDescription implements Serializable {
 
   }
 
-  public LinkDescription(String neighbourIP, int portNum, int distance){
-    this.linkID = neighbourIP;
+  public LinkDescription(String myIP, String neighbourIP, int portNum, int distance){
+    this.linkID = myIP;
+    this.neighbourIP = neighbourIP;
     this.portNum = portNum;
     this.tosMetrics = distance;
   }

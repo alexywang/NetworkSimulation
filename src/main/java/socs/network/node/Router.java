@@ -145,7 +145,7 @@ public class Router {
   private void processNeighbors() {
     for(int i = 0; i < ports.length; i++){
       if(ports[i] != null && ports[i].router2.status == RouterStatus.TWO_WAY){
-        System.out.println(ports[i].getLinkIP());
+        System.out.println(ports[i].getLinkIP() + " " + ports[i].weight);
       }
     }
   }
@@ -168,6 +168,7 @@ public class Router {
     for(int i = 0; i < ports.length; i++){
       if(ports[i] == null){
         ports[i] = link;
+        lsd.addMyLink(link, i);
         return;
       }
     }
@@ -234,7 +235,7 @@ public class Router {
       sendHello(packet.srcIP);
 
       try{
-        Thread.sleep(100);
+        Thread.sleep(250);
         System.err.println("Forwarding LSA to neighbours");
         forwardLSA(generateLSA(), rd.simulatedIPAddress);
       }catch(Exception e){
@@ -271,7 +272,8 @@ public class Router {
     // Generate neighbour descriptions and prepare LSA
     for(int i = 0; i < ports.length; i++){
       if(ports[i] != null){
-        LinkDescription desc = new LinkDescription(ports[i].router1.simulatedIPAddress, i, ports[i].weight);
+        System.err.println(ports[i].getLinkIP());
+        LinkDescription desc = new LinkDescription(ports[i].router1.simulatedIPAddress, ports[i].getLinkIP(), i, ports[i].weight);
         myLSA.links.add(desc);
       }
     }

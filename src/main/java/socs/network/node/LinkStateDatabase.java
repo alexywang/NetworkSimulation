@@ -33,6 +33,12 @@ public class LinkStateDatabase {
     }
   }
 
+  // Add a newly attached link to my LSA
+  public void addMyLink(Link link, int port){
+    LSA myLSA = _store.get(link.router1.simulatedIPAddress);
+    myLSA.links.add(new LinkDescription(link.router1.simulatedIPAddress, link.getLinkIP(), port, link.weight ));
+  }
+
 
   //initialize the linkstate database by adding an entry about the router itself
   private LSA initLinkStateDatabase() {
@@ -41,6 +47,7 @@ public class LinkStateDatabase {
     lsa.lsaSeqNumber = Integer.MIN_VALUE;
     LinkDescription ld = new LinkDescription();
     ld.linkID = rd.simulatedIPAddress;
+    ld.neighbourIP = rd.simulatedIPAddress;
     ld.portNum = -1;
     ld.tosMetrics = 0;
     lsa.links.add(ld);
@@ -53,7 +60,7 @@ public class LinkStateDatabase {
     for (LSA lsa: _store.values()) {
       sb.append(lsa.linkStateID).append("(" + lsa.lsaSeqNumber + ")").append(":\t");
       for (LinkDescription ld : lsa.links) {
-        sb.append(ld.linkID).append(",").append(ld.portNum).append(",").
+        sb.append(ld.linkID).append(",").append(ld.portNum).append(",").append(ld.neighbourIP).append(",").
                 append(ld.tosMetrics).append("\t");
       }
       sb.append("\n");
